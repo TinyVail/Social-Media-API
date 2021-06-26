@@ -1,0 +1,29 @@
+{
+  "name": "social-media-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "serverTest",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TinyVail/Social-Media-API.git"
+  },
+  "keywords": [
+    "Api",
+    "social",
+    "media"
+  ],
+  "author": "TinyVail",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TinyVail/Social-Media-API/issues"
+  },
+  "homepage": "https://github.com/TinyVail/Social-Media-API#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.15"
+  }
+}
