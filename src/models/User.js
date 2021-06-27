@@ -3,6 +3,9 @@
 */
 
 const mongoose = require('mongoose');
+const thought = require('./Thought');
+
+const name = "User";
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -24,8 +27,11 @@ const userSchema = new mongoose.Schema({
         },
 
     },
-    thoughts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Thought' }],
-    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+    thoughts: [{ type: mongoose.Schema.Types.ObjectId, ref: thought.name }],
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: name }]
 });
 
-module.exports = userSchema;
+module.exports = {
+    schema: userSchema,
+    name: name,
+};

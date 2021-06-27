@@ -1,5 +1,7 @@
-const { Module } = require('module');
 const mongoose = require('mongoose');
+const Reaction = require('./Reaction');
+
+const name = "Thought";
 
 const thoughtSchema = new mongoose.Schema({
     thoughtText: {
@@ -12,11 +14,16 @@ const thoughtSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        trim: true,
-        unique: true,
+        default: Date.now
     },
-    username: {},
-    reactions: {},
+    username: {
+        type: String,
+        required: true
+    },
+    reactions: [Reaction.schema]
 });
 
-module.exports = thoughtSchema;
+module.exports = {
+    schema: thoughtSchema,
+    name: name,
+}

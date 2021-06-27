@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const userSchema = require("../models/User");
-const thoughtSchema = require('../models/Thought');
+const user = require("../models/User");
+const thought = require('../models/Thought');
 
 const databaseName = "SocialMediaAPI";
 async function connect() {
@@ -8,16 +8,16 @@ async function connect() {
         // Connect to the database
         await mongoose.connect(`mongodb://localhost:27017/${databaseName}`, { useNewUrlParser: true });
         // Create a model
-        const userModel = mongoose.model("User", userSchema);
+        const userModel = mongoose.model(user.name, user.schema);
         // Create an instance of the model
-        const user = new userModel({
-            username: "TestUser2",
+        const newUser = new userModel({
+            username: "TestUser",
             email: "test2@mail.net",
             thoughts: [],
             friends: []
         });
-		// Save the user to the database and log the result
-        const saveResult = await user.save();
+        // Save the user to the database and log the result
+        const saveResult = await newUser.save();
         console.log("Creating User Status:");
         console.log(saveResult);
     } catch (e) {
