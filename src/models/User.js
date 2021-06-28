@@ -4,7 +4,6 @@
 
 const mongoose = require('mongoose');
 const thought = require('./Thought');
-
 const name = "User";
 
 const userSchema = new mongoose.Schema({
@@ -31,7 +30,13 @@ const userSchema = new mongoose.Schema({
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: name }]
 });
 
+
+
 module.exports = {
     schema: userSchema,
     name: name,
 };
+
+// const userImport = require('../models/User');
+// If we want the schema: userImport.schema;
+// If we want the name: userImport.name;
