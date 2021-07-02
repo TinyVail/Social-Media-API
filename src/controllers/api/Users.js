@@ -15,6 +15,16 @@ router.get('/', async (req, res) => {
 });
 
 // find one by id
+router.get('/', async (req, res) => {
+    const user = await models.user.findOne();
+    // Return user data as JSON
+    if (user != null) {
+        res.status(200).send(user);
+    } else {
+        res.status(400).send(`User entered do not exist`);
+    }
+});
+
 
 // router.get('/:id', async (req, res) => {
 //     const id = req.params.id;
