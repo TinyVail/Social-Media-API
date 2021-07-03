@@ -45,11 +45,15 @@ router.post('/', async (req, res) => {
             // update associated user
             const id = newThought._id;
             const user = await models.user.findById(userId);
-            user.thoughts.push(id);
-            await user.save();
-            res.status(200).send(newThought);
+            if (userId) {
+                user.thoughts.push(id);
+                await user.save();
+                res.status(200).send(newThought);
+            } else {
+                throw new Error(`User ${userId} does not exist`);
+            }
         } catch (e) {
-            res.status(400).send(e);
+            res.status(400).send(`Error: ${JSON.stringify({ err: { message: e.message, stack: e.stack } })}`);
         }
     } else {
         res.status(400).send("Please fill out proper info to create a a thought");
@@ -79,12 +83,30 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// UPDATE THOUGHT
+router.put('/:id', async (req, res) => {
+    try {
+        const body = req.body;
+        if (!body.thoughtText) {
+            res.status(400).send(`Must add text to update thought`);
+        }
+        await models.thought.findByIdAndUpdate(req.params.id, { thoughtText: body.thoughtText });
+        const thought = await models.thought.findById(req.params.id);
+        if (thought != null) {
+            res.status(200).send(thought);
+        } else {
+            res.status(400).send(`thought does not exist`);
+        }
+    } catch (error) {
+        res.status(400).send(`Error: ${error}`);
+    }
+});
 // reaction 
 
 router.post('/api/thoughts:thoughtId/reactions', async (req, res) => {
     try {
         // Step 1: find the user associated with userId
-        const user = await models.thought.findById(req.params.userId);
+        const user = await models.user.findById(req.params.userId);
         // Step 2: find the user associated with friendId (to make sure they exist)
         const reactionThought = await models.thought.findById(req.params.thoughtId);
         // Step 3: Update the userId User's friends array to also have the friendId
