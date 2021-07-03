@@ -8,7 +8,6 @@ const thoughtSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        unique: true,
         minLength: 1,
         maxLength: 280
     },

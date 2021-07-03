@@ -60,14 +60,22 @@ router.post('/', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        const user = await models.thought.findByIdAndDelete(req.params.id);
-        if (user != null) {
-            res.status(200).send(user);
+        // update thoughts in thought model
+        const thought = await models.thought.findByIdAndDelete(req.params.id);
+        // updated thoughts in user model 
+        const affectedUser = await models.user.findOne({ username: thought.username });
+        affectedUser.thoughts = affectedUser.thoughts.filter(userThought => userThought != req.params.id);
+        await affectedUser.save();
+        if (thought != null) {
+            res.status(200).send({
+                thought: thought,
+                user: affectedUser
+            });
         } else {
-            res.status(400).send(`User entered do not exist, so no thoughts`);
+            res.status(400).send(`Thought entered do not exist, so no thoughts`);
         }
     } catch (error) {
-        res.status(400).send(`User entered do not exist, so no thoughts`);
+        res.status(400).send(`Thought entered do not exist, so no thoughts`);
     }
 });
 
