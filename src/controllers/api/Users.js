@@ -1,14 +1,26 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const models = require('../../models/Models');
+const thought = require('../../models/Thought');
 
 // find all users
 
 router.get('/', async (req, res) => {
-    const user = await models.user.find();
+    const users = await models.user.find();
+
+    /**
+    The below code is equivalent to: 
+    for(let i = 0; i < users.length; i++) {
+        const user = users[i];
+        ...etc
+    }
+    */
+    for (const user of users) {
+        await user.populate(thought.name).execPopulate();
+    }
     // Return user data as JSON
-    if (user != null) {
-        res.status(200).send(user);
+    if (users != null) {
+        res.status(200).send(users);
     } else {
         res.status(400).send(`Users do not exist`);
     }
@@ -18,6 +30,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const user = await models.user.findById(req.params.id);
+        await user.populate(thought.name).execPopulate();
         if (user != null) {
             res.status(200).send(user);
         } else {
@@ -130,6 +143,7 @@ router.post('/:userId/friends/:friendId', async (req, res) => {
     } catch (e) {
         res.status(400).send(`Error: ${e}`);
     }
+
 });
 
 module.exports = router;
