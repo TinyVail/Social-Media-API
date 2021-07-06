@@ -9,7 +9,8 @@ const name = "Reaction";
 const reactionSchema = new mongoose.Schema({
 	reactionId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: name
+		ref: name,
+		default: () => { return new mongoose.Types.ObjectId() }
 	},
 	reactionBody: {
 		type: String,

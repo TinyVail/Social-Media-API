@@ -103,20 +103,37 @@ router.put('/:id', async (req, res) => {
 });
 // reaction 
 
-router.post('/api/thoughts:thoughtId/reactions', async (req, res) => {
+router.post('/:thoughtId/reactions', async (req, res) => {
     try {
-        // Step 1: find the user associated with userId
-        const user = await models.user.findById(req.params.userId);
-        // Step 2: find the user associated with friendId (to make sure they exist)
+        // this code is the same as:
+        /**
+        const reactionBody = req.body.reactionBody;
+        const username = req.body.username;
+        */
+        const { reactionBody, username } = req.body;
+        if (reactionBody == null || username == null) {
+            throw new Error("Please set a reactionBody and a username");
+        }
         const reactionThought = await models.thought.findById(req.params.thoughtId);
-        // Step 3: Update the userId User's friends array to also have the friendId
-        user.thought.push(reactionThought._id);
-        await user.save();
-        res.status(200).send(user);
+        reactionThought.reactions.push({ reactionBody, username });
+        await reactionThought.save();
+        res.status(200).send(reactionThought);
     } catch (e) {
         res.status(400).send(`Error: ${e}`);
     }
 });
 
+// delete a reaction by id
+router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
+    try {
+        const reactionThought = await models.thought.findById(req.params.thoughtId);
+        // only keep reactions with a different reactionID as the one given in the requestion (so that one is removed)
+        reactionThought.reactions = reactionThought.reactions.filter(reaction => reaction.reactionId != req.params.reactionId);
+        await reactionThought.save();
+        res.status(200).send(reactionThought);
+    } catch (e) {
+        res.status(400).send(`Error: ${e}`);
+    }
+});
 
 module.exports = router;

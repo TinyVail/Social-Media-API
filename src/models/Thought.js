@@ -26,4 +26,4 @@ const thoughtSchema = new mongoose.Schema({
 module.exports = {
     schema: thoughtSchema,
     name: name,
-}
+};
